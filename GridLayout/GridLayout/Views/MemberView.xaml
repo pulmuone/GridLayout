@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+			 xmlns:xct2="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+             xmlns:vm="clr-namespace:GridLayout.ViewModels"
+             xmlns:local="clr-namespace:GridLayout.Views;assembly=GridLayout"
+             x:Name="pg"
+             x:Class="GridLayout.Views.MemberView">
+
+    <ContentPage.BindingContext>
+        <vm:MemberViewModel x:Name="vm"/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" 
+					 Priority="0" 
+					 x:Name="ToolbarItemGridCV"
+					 IsEnabled="{Binding IsControlEnable}"
+					 IconImageSource="{local:ImageResource GridLayout.Images.gridcv128.png}" 
+					 Clicked="ToolbarItemGridCV_Clicked"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <Grid RowDefinitions="50, *" RowSpacing="0">
+            <Grid Grid.Row="0" RowSpacing="0">
+                <Grid ColumnDefinitions="*,*" RowSpacing="0">
+                    <Button Text="Search"
+                        Grid.Column="0"
+						IsEnabled="{Binding IsControlEnable}" 
+						Command="{Binding SearchCommand}"
+						CommandParameter="{x:Reference Name=pg}"/>
+
+                    <Button Text="Save"
+                        Grid.Column="1"
+						IsEnabled="{Binding IsControlEnable}" 
+						Command="{Binding SaveCommand}"
+						CommandParameter="{x:Reference Name=pg}"/>
+                </Grid>
+            </Grid>
+
+            <ScrollView Grid.Row="1" 
+                        Orientation="Horizontal"
+                        HorizontalScrollBarVisibility="Always"
+						VerticalScrollBarVisibility="Always"
+						HorizontalOptions="FillAndExpand"
+						VerticalOptions="FillAndExpand">
+                <Grid x:Name="gridCV" 
+                      RowDefinitions ="51, *" 
+                      RowSpacing="0" 
+					  ColumnSpacing="0" 
+					  Padding="0,0,0,0" 
+					  Margin="0,0,0,0">
+
+
+                </Grid>
+            </ScrollView>
+
+            <ActivityIndicator Grid.Row="1" 
+							   Color="Red"
+							   IsRunning="{Binding IsBusy}"  
+							   IsVisible="{Binding IsBusy}"
+							   VerticalOptions="Center"
+							   HorizontalOptions="Center">
+            </ActivityIndicator>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

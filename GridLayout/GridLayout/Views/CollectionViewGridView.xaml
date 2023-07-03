@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup   xmlns="http://xamarin.com/schemas/2014/forms"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+			 xmlns:vm="clr-namespace:GridLayout.ViewModels"
+			 xmlns:local="clr-namespace:GridLayout.Views;assembly=GridLayout"
+			 xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+			 xmlns:xct2="http://xamarin.com/schemas/2020/toolkit"   
+			 IsLightDismissEnabled="False"
+			 Size="{x:Static local:PopupSize.Large}"
+			 x:Name="pg"         
+			 x:Class="GridLayout.Views.CollectionViewGridView">
+
+    <xct:Popup.Resources>
+        <ResourceDictionary>
+            <Style x:Key="Title" TargetType="Label">
+                <Setter Property="FontSize" Value="26" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="#000" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+            </Style>
+            <Style x:Key="Divider" TargetType="BoxView">
+                <Setter Property="HeightRequest" Value="1" />
+                <Setter Property="Margin" Value="50, 25" />
+                <Setter Property="Color" Value="#c3c3c3" />
+            </Style>
+            <Style x:Key="Content" TargetType="Label">
+                <Setter Property="HorizontalTextAlignment" Value="Start" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+            </Style>
+            <Style x:Key="PopupLayout" TargetType="StackLayout">
+                <Setter Property="Padding" Value="{OnPlatform Android=10, UWP=10, iOS=5}" />
+            </Style>
+            <Style x:Key="CancelButton" TargetType="Button">
+                <Setter Property="Background" Value="#FFFFFF" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="BorderColor" Value="Blue" />
+                <Setter Property="TextColor" Value="Blue" />
+            </Style>
+
+            <Style x:Key="OkButton" TargetType="Button">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="BackgroundColor" Value="#512BD4" />
+                <Setter Property="TextColor" Value="#FFFFFF" />
+                <Setter Property="CornerRadius" Value="5" />
+            </Style>
+            <Style x:Key="ButtonGroup" TargetType="StackLayout">
+                <Setter Property="VerticalOptions" Value="EndAndExpand" />
+                <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+                <Setter Property="Spacing" Value="30" />
+                <Setter Property="Orientation" Value="Horizontal" />
+            </Style>
+        </ResourceDictionary>
+    </xct:Popup.Resources>
+    <Grid ColumnDefinitions="*,*,*"
+		  RowDefinitions="70,*">
+
+        <Grid Grid.Row="0" Grid.Column="0" Margin="0,20,0,0">
+            <Button x:Name="CancelButton"
+						IsEnabled="{Binding IsControlEnable}" 
+						Text="Cancel"
+						Margin="0,0,0,0"
+						Style="{StaticResource CancelButton}"
+						Command="{Binding CancelCommand}"
+						CommandParameter="{x:Reference Name=pg}"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="1" Margin="0,20,0,0">
+            <Button x:Name="RestButton"
+						IsEnabled="{Binding IsControlEnable}" 
+						Text="Reset"
+						Margin="0,0,0,0"
+						Style="{StaticResource CancelButton}"
+						Command="{Binding ResetCommand}"
+						CommandParameter="{x:Reference Name=pg}"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="2" Margin="0,20,0,0">
+            <Button x:Name="OKButton"
+						IsEnabled="{Binding IsControlEnable}" 
+						Text="Save"
+						Margin="0,0,0,0"  
+						Command="{Binding OKayCommand}"
+						CommandParameter="{x:Reference Name=pg}"/>
+        </Grid>
+
+        <CollectionView x:Name="collectionView"
+						Grid.Row="1" 
+						SelectionMode="Single"
+						SelectedItem="{Binding SelectedItem}"
+						Grid.ColumnSpan="3"
+						ItemsSource="{Binding GridLayouts}">
+            <CollectionView.Header>
+                <Grid RowDefinitions="50, 1"
+					  RowSpacing="0"
+					  ColumnDefinitions="*, 70, 70, 60"
+					  BackgroundColor="#598CB5"
+					  Style="{StaticResource gridStyle}">
+                    <Label Text="Column Name" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" TextColor="White"/>
+                    <!--<Label Text="데이터 타입" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" TextColor="White"/>-->
+                    <Label Text="Width" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" TextColor="White"/>
+                    <Label Text="Alignment" Grid.Column="2" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" TextColor="White"/>
+                    <Label Text="Is Use" Grid.Column="3" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" TextColor="White"/>
+                    <BoxView Grid.Row="1" Grid.ColumnSpan="4" Color="DarkGray" CornerRadius="5" />
+
+                </Grid>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="50, 1"
+						  ColumnDefinitions="*, 70, 70, 60"
+						  RowSpacing="0" ColumnSpacing="0" Padding="0,0,0,0" Margin="0,0,0,0"
+						  Style="{StaticResource gridStyle}">
+
+                        <Grid Grid.Row="0" Grid.ColumnSpan="3"
+							BackgroundColor="LightYellow"
+							HeightRequest="50"
+							IsVisible="{Binding IsBeingDraggedOver}" />
+
+                        <!--<Label Text="{Binding ID}"/>
+						<Label Text="{Binding Menu}"/>
+						<Label Text="{Binding Seq}"/>
+						<Label Text="{Binding ColumnCode}"/>-->
+                        <Label Text="{Binding ColumnName}" Grid.Column="0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}">
+                            <Label.GestureRecognizers>
+                                <DragGestureRecognizer
+									CanDrag="True"
+									DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference collectionView}}"
+									DragStartingCommandParameter="{Binding}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <!--<Label Text="{Binding ColumnTypeName}" Grid.Column="1" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}">
+							<Label.GestureRecognizers>
+								<DragGestureRecognizer
+									CanDrag="True"
+									DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference collectionView}}"
+									DragStartingCommandParameter="{Binding}" />
+							</Label.GestureRecognizers>
+						</Label>-->
+
+                        <Entry Text="{Binding Width}" Grid.Column="1" Keyboard="Numeric"
+							   TextChanged="Entry_TextChanged"
+							   Focused="Entry_Focused"
+							   Unfocused="Entry_Unfocused"
+							   VerticalTextAlignment="Center" 
+							   BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}"
+							   ReturnCommandParameter="{Binding ID}">
+                            <Entry.GestureRecognizers>
+                                <DragGestureRecognizer
+									CanDrag="True"
+									DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference collectionView}}"
+									DragStartingCommandParameter="{Binding}" />
+                            </Entry.GestureRecognizers>
+                        </Entry>
+
+                        <Picker Grid.Column="2"  
+								HorizontalTextAlignment="Center"
+								ItemsSource="{Binding TextAlignments}"
+								ItemDisplayBinding="{Binding Name}"
+								SelectedItem="{Binding HorTextAlignment}"/>
+
+                        <CheckBox IsChecked="{Binding IsUse}" 
+								  Grid.Column="3" 
+								  BackgroundColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}">
+                            <CheckBox.GestureRecognizers>
+                                <DragGestureRecognizer
+									CanDrag="True"
+									DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference collectionView}}"
+									DragStartingCommandParameter="{Binding}" />
+                            </CheckBox.GestureRecognizers>
+                            <CheckBox.Behaviors>
+                                <xct2:EventToCommandBehavior EventName="CheckedChanged"
+															 Command="{Binding Path=BindingContext.CheckedChangedCommand, Source={x:Reference pg}}"
+															 CommandParameter="{Binding ID}"/>
+                            </CheckBox.Behaviors>
+                        </CheckBox>
+
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="4" Color="DarkGray" CornerRadius="5" />
+
+                        <Grid.GestureRecognizers>
+                            <DropGestureRecognizer
+								AllowDrop="True"
+								DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={x:Reference collectionView}}"
+								DragLeaveCommandParameter="{Binding}"
+								DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={x:Reference collectionView}}"
+								DragOverCommandParameter="{Binding}"
+								DropCommand="{Binding BindingContext.ItemDropped, Source={x:Reference collectionView}}"
+								DropCommandParameter="{Binding}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+</xct:Popup>
