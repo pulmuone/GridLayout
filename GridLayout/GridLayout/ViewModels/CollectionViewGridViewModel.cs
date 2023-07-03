@@ -130,7 +130,7 @@ namespace GridLayout.ViewModels
                 GridLayouts.Add(new GridLayoutDto()
                 {
                     ID = item.ID,
-                    UserID= "admin",
+                    UserID = "admin",
                     MenuCode = item.MenuCode,
                     ColumnCode = item.ColumnCode,
                     ColumnName = item.ColumnName,
@@ -149,49 +149,40 @@ namespace GridLayout.ViewModels
 
         private async Task Okay(object obj)
         {
-            //IsControlEnable = false;
-            //IsBusy = true;
-            //(OKayCommand as Command).ChangeCanExecute();
-            try
+            IsControlEnable = false;
+            IsBusy = true;
+            (OKayCommand as Command).ChangeCanExecute();
+
+            GridDatabase database = await GridDatabase.Instance;
+            for (int i = 0; i < GridLayouts.Count; i++)
             {
-                GridDatabase database = await GridDatabase.Instance;
-                for (int i = 0; i < GridLayouts.Count; i++)
+                GridLayouts[i].Seq = i;
+                GridLayouts[i].IsUseValue = GridLayouts[i].IsUse ? "Y" : "N";
+                //GridColumns[i].HorizontalTextAlignment = GridColumns[i].HorTextAlignment.Code;
+
+                if (GridLayouts[i].HorTextAlignmentCode == 0)
                 {
-                    GridLayouts[i].Seq = i;
-                    GridLayouts[i].IsUseValue = GridLayouts[i].IsUse ? "Y" : "N";
-                    //GridColumns[i].HorizontalTextAlignment = GridColumns[i].HorTextAlignment.Code;
-
-                    if (GridLayouts[i].HorTextAlignmentCode == 0)
-                    {
-                        GridLayouts[i].HorizontalTextAlignment = TextAlignment.Start;
-                    }
-                    else if (GridLayouts[i].HorTextAlignmentCode == 1)
-                    {
-                        GridLayouts[i].HorizontalTextAlignment = TextAlignment.Center;
-                    }
-                    else if (GridLayouts[i].HorTextAlignmentCode == 2)
-                    {
-                        GridLayouts[i].HorizontalTextAlignment = TextAlignment.End;
-                    }
+                    GridLayouts[i].HorizontalTextAlignment = TextAlignment.Start;
                 }
-
-                database.UpdateItem(GridLayouts.ToList());
-
-                //List<Models.GridLayout> dbGridColumns = await database.GetColumnsAsync("admin", this._menuCode);
-
-                ClosedEvent?.Invoke(true);
-
-                ((Xamarin.CommunityToolkit.UI.Views.Popup)obj).Dismiss(true);
+                else if (GridLayouts[i].HorTextAlignmentCode == 1)
+                {
+                    GridLayouts[i].HorizontalTextAlignment = TextAlignment.Center;
+                }
+                else if (GridLayouts[i].HorTextAlignmentCode == 2)
+                {
+                    GridLayouts[i].HorizontalTextAlignment = TextAlignment.End;
+                }
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-            
 
-            //IsControlEnable = true;
-            //IsBusy = false;
-            //(OKayCommand as Command).ChangeCanExecute();
+            database.UpdateItem(GridLayouts.ToList());
+
+            ClosedEvent?.Invoke(true);
+
+            ((Xamarin.CommunityToolkit.UI.Views.Popup)obj).Dismiss(true);
+
+            IsControlEnable = true;
+            IsBusy = false;
+            (OKayCommand as Command).ChangeCanExecute();
         }
 
         private async Task Reset(object obj)
