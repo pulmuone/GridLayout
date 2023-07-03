@@ -41,6 +41,7 @@ namespace GridLayout.Views
             // 1.
             //##############
             gridCV.Children.Clear();
+            gridCV.ColumnDefinitions.Clear();
 
             //##############
             // 2. 컬럼 선언, 신규 컬럼은 마지막에 추가해야 한다.
