@@ -5,7 +5,7 @@
 			 xmlns:local="clr-namespace:GridLayout.Views;assembly=GridLayout"
 			 xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
 			 xmlns:xct2="http://xamarin.com/schemas/2020/toolkit"   
-			 IsLightDismissEnabled="False"
+			 IsLightDismissEnabled="True"
 			 Size="{x:Static local:PopupSize.Large}"
 			 x:Name="pg"         
 			 x:Class="GridLayout.Views.CollectionViewGridView">

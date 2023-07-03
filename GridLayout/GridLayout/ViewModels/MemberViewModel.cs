@@ -59,7 +59,11 @@ namespace GridLayout.ViewModels
                 new EmpModel {EmpId = 7,  EmpName = "name #7", Addr="7, Hangang-daero, Yongsan-gu, Seoul, Republic of Korea", Age = 17, GradeCode = "003"},
                 new EmpModel {EmpId = 8,  EmpName = "name #8", Addr="8, Hangang-daero, Yongsan-gu, Seoul, Republic of Korea", Age = 18, GradeCode = "004"},
                 new EmpModel {EmpId = 9,  EmpName = "name #9", Addr="9, Hangang-daero, Yongsan-gu, Seoul, Republic of Korea", Age = 19, GradeCode = "001"},
-                new EmpModel {EmpId = 10,  EmpName = "name #10", Addr="10, Hangang-daero, Yongsan-gu, Seoul, Republic of Korea", Age = 20, GradeCode = "002"}
+                new EmpModel {EmpId = 10,  EmpName = "name #10", Addr="10, Hangang-daero, Yongsan-gu, Seoul, Republic of Korea", Age = 20, GradeCode = "002"},
+                new EmpModel {EmpId = 11,  EmpName = "name #10", Addr="11, Hangang-daero, Yongsan-gu, Seoul, Republic of Korea", Age = 20, GradeCode = "002"},
+                new EmpModel {EmpId = 12,  EmpName = "name #10", Addr="12, Hangang-daero, Yongsan-gu, Seoul, Republic of Korea", Age = 20, GradeCode = "002"},
+                new EmpModel {EmpId = 13,  EmpName = "name #10", Addr="13, Hangang-daero, Yongsan-gu, Seoul, Republic of Korea", Age = 20, GradeCode = "002"},
+                new EmpModel {EmpId = 14,  EmpName = "name #10", Addr="14, Hangang-daero, Yongsan-gu, Seoul, Republic of Korea", Age = 20, GradeCode = "002"}
             };
 
             EmpList.ReplaceRange(Employees);
@@ -71,27 +75,34 @@ namespace GridLayout.ViewModels
 
         private void Sorted(DataGridHeader e)
         {
-            if (!e.SortingEnabled)
+            try
             {
-                return;
+                if (!e.SortingEnabled)
+                {
+                    return;
+                }
+
+                SortingOrder sortMethod;
+
+                if (e.SortFlag == SortingOrder.None || e.SortFlag == SortingOrder.Ascendant)
+                {
+                    sortMethod = SortingOrder.Descendant;
+                }
+                else
+                {
+                    sortMethod = SortingOrder.Ascendant;
+                }
+
+                e.SortFlag = sortMethod;
+                List<EmpModel> lst = EmpList.ToList();
+
+                SortData.SortList(ref lst, e.SortFlag, e.FieldName);
+                EmpList.ReplaceRange(lst);
             }
-
-            SortingOrder sortMethod;
-
-            if (e.SortFlag == SortingOrder.None || e.SortFlag == SortingOrder.Ascendant)
-            {
-                sortMethod = SortingOrder.Descendant;
-            }
-            else
-            {
-                sortMethod = SortingOrder.Ascendant;
-            }
-
-            e.SortFlag = sortMethod;
-            List<EmpModel> lst = EmpList.ToList();
-
-            SortData.SortList(ref lst, e.SortFlag, e.FieldName);
-            EmpList.ReplaceRange(lst);
+            catch(Exception ex) 
+            { 
+                Debug.WriteLine(ex.Message);
+            }           
         }
 
         public ObservableRangeCollection<EmpModel> EmpList

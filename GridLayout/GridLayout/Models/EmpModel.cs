@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace GridLayout.Models
 {
-    public class EmpModel : ObservableObject
+    public class EmpModel : BindableObject
     {
         public ICommand PlusButtonCommand { get; }
         public ICommand MinusButtonCommand { get; }
@@ -63,7 +63,6 @@ namespace GridLayout.Models
                 var row = lst.FirstOrDefault(t => t.Code == value);
                 Grade = row;
                 OnPropertyChanged();
-                //SelectedRow = lst.IndexOf(row);
             }
         }
 

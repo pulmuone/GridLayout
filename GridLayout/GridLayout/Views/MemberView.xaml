@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
 			 xmlns:xct2="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+              xmlns:converters="clr-namespace:GridLayout.Converters"
              xmlns:vm="clr-namespace:GridLayout.ViewModels"
              xmlns:local="clr-namespace:GridLayout.Views;assembly=GridLayout"
              x:Name="pg"
